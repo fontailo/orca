@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { isSidebarLabelTruncated } from '@/components/ui/truncated-sidebar-label'
 import type {
   PluginDeclarativeChild,
   PluginDeclarativeNode,
@@ -79,6 +80,17 @@ type RenderContext = {
   openLink?: (href: string, gestureId: string) => void
   /** Inside Text or Heading, where Text flows inline instead of as a block. */
   inline: boolean
+}
+
+/** A truncated Text shows its full words on hover, only while the ellipsis cuts them. */
+function titleClippedText(event: React.MouseEvent<HTMLElement>): void {
+  const element = event.currentTarget
+  // Removed rather than emptied: an empty title would hide a truncated outer Text's title.
+  if (isSidebarLabelTruncated(element)) {
+    element.title = element.textContent ?? ''
+  } else {
+    element.removeAttribute('title')
+  }
 }
 
 function renderChildren(children: PluginDeclarativeChild[], context: RenderContext) {
@@ -163,6 +175,7 @@ function PluginDeclarativeNodeView({
           data-weight={node.props.weight ?? 'regular'}
           data-truncate={node.props.truncate ?? false}
           data-inline={context.inline}
+          onMouseEnter={node.props.truncate ? titleClippedText : undefined}
           className="min-w-0 break-words text-foreground data-[inline=false]:block data-[size=md]:text-base data-[size=sm]:text-sm data-[size=xs]:text-xs data-[tone=accent]:text-primary data-[tone=danger]:text-destructive data-[tone=muted]:text-muted-foreground data-[tone=success]:text-status-success data-[tone=warning]:text-status-warning-text data-[truncate=true]:truncate data-[weight=medium]:font-medium data-[weight=semibold]:font-semibold"
         >
           {children}

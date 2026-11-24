@@ -368,6 +368,7 @@ vocabulary, `tone`: `neutral` `accent` `success` `warning` `danger`.
 
 `Button` and `IconButton` also take `tooltip` (since 1.4.247). A tooltip only names a control: an
 `IconButton`'s defaults to its `label`; on a `Button`, use it for a short hint its text leaves out.
+A `truncate` `Text` cut short shows its full text on hover.
 
 ### Added in Orca 1.4.247 (`ui.catalog` 2)
 
